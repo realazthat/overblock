@@ -1,0 +1,123 @@
+
+.most-recent-blocks-table{
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.most-recent-blocks-table > tbody > tr > th{
+    text-align:left;
+}
+
+
+
+
+
+
+
+
+
+.block-summary-table{
+    width:42%;
+    
+    /*
+    float:left;
+    */
+}
+.block-summary-table > tbody > tr > th{
+    text-align:left;
+}
+
+
+.block-hashes-table{
+    width:52%;
+    float:right;
+
+}
+.block-hashes-table > tbody > tr > th{
+    text-align:left;
+}
+
+
+
+.transactions-section{
+    clear:both;
+}
+
+.transaction-section{
+    clear:both;
+    padding:3px;
+}
+
+.transaction-section-header{
+    clear:both;
+    border-top: 1px solid #b0c4de;
+    border-bottom: 1px solid #b0c4de;
+    background-color: #e4e4e4;
+    padding: .5em;
+}
+
+.tx-inputs{
+    width:48%;
+    float:left;
+}
+
+.tx-inputs > strong{
+    color: #888888;
+}
+
+
+.tx-outputs{
+    width:48%;
+    float:right;
+}
+
+.tx-outputs-table{
+    width:100%;
+}
+.tx-outputs-table ul{
+    list-style-type:none;
+}
+
+.transaction-section-footer{
+    margin-left:auto;
+    margin-right:auto;
+    width:96%;
+    height:2em;
+    vertical-align:middle;
+    clear:both;
+    
+}
+
+.transaction-total-output{
+    
+    margin-left:auto;
+    
+    margin-right:1em;
+    
+    
+    padding:.5em;
+    width:auto;
+    display:inline;
+    float:right;
+    
+    /*
+     * 
+     * */
+    background-color: #658d7a;
+}
+
+
+
+
+
+
+
+
+
+
+
+.clear{
+    clear:both;
+}
+
