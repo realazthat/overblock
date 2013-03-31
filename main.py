@@ -6,7 +6,7 @@
 
 
 
-from servlet_original import HttpServer,HttpServlet
+from servlet import HttpServer,HttpServlet
 import bitcoinrpc
 
 import urlparse
@@ -457,7 +457,7 @@ class BlockView(Page):
                 
                 writer.pln('<tr>')
                 writer.pln('<td>Transaction Fees</td>')
-                writer.pln('<td>N/A (requires options <i>blk_get_txs</i> and <i>blk_get_tx_inputs</i></td>')
+                writer.pln('<td>N/A (requires options <i>blk_get_txs</i> and <i>blk_get_tx_inputs</i>)</td>')
                 writer.pln('</tr>')
             
             
