@@ -954,7 +954,7 @@ def main():
     HttpServer.allow_reuse_address = True
     DemuxServlet.debug(True)
 
-    port = 51234
+    port = config['listen_port']
     httpd = HttpServer(('', port), DemuxServlet)
     httpd.__debug = True
     
