@@ -25,7 +25,8 @@ The rest of the project is released under the MIT license, unless otherwise note
 
 ###Usage
 
-Using a web-browser, browse to `http://localhost:<listen_port>/`, where `<listen_port>` is the port indicated in your configuration.
+* Run `python main.py`.
+* Using a web-browser, browse to `http://localhost:<listen_port>/`, where `<listen_port>` is the port indicated in your configuration.
 
 
 
