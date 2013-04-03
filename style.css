@@ -117,6 +117,23 @@
 
 
 
+
+.transaction-summary-table{
+    width:42%;
+    
+}
+.transaction-summary-table > tbody > tr > th{
+    text-align:left;
+}
+.transaction-input-output-table{
+    width:42%;
+}
+.transaction-input-output-table > tbody > tr > th{
+    text-align:left;
+}
+
+
+
 .clear{
     clear:both;
 }

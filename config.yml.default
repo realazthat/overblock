@@ -2,3 +2,4 @@ rpcserverurl: http://user:pass@192.168.2.2:8332
 blk_get_tx_inputs: no
 blk_get_txs: no
 listen_port: 51234
+k_most_recent: 4
