@@ -2,6 +2,9 @@
 from decimal import Decimal
 
 from time import gmtime, strftime,time
+from copy import deepcopy
+from pprint import pprint
+
 
 def calc_reward_satoshi(height):
     return 5000000000 / 2**(int(height / 210000))
@@ -91,4 +94,120 @@ def format_relative_time(t):
     days = int(t/day_seconds)
     hours = int((t - (days*day_seconds)) / hour_seconds)
     return '{hours} hours {minutes} minutes'.format(hours=hours,minutes=minutes)
+
+
+def calculate_tx_input_satoshi(tx_info,src_tx_infos):
+    
+    """
+    if not option_blk_get_txs:
+        return None
+    if not option_blk_get_tx_inputs:
+        return None
+    """
+    
+    #tx_info = tx_infos[txid]
+    tx_total_input_value_satoshi = 0
+    for src_tx_entry in tx_info['vin']:
+        
+        if 'txid' in src_tx_entry:
+            src_txid = src_tx_entry['txid']
+            src_tx_outidx = src_tx_entry['vout']
+            assert src_txid in src_tx_infos and "LOGIC ERROR, THE NECESSARY INPUT TXs WERE NOT COLLECTED FOR THIS CALL DUE TO SETTINGS, PLEASE CHECK SETTING BEFORE MAKING CALL"
+            src_tx_info = src_tx_infos[src_txid]
+            
+            tx_total_input_value_satoshi += btc_to_satoshi(src_tx_info['vout'][src_tx_outidx]['value'])
+    return tx_total_input_value_satoshi
+
+def calculate_tx_output_satoshi(tx_info):
+
+
+    tx_total_output_value = 0
+    for tx_output in tx_info['vout']:
+        tx_total_output_value += btc_to_satoshi(tx_output['value'])
+
+    return tx_total_output_value
+
+def is_tx_coinbase(tx_info):
+    
+    for tx_input in tx_info['vin']:
+        if 'coinbase' in tx_input:
+            return True
+    return False
+
+def calculate_tx_fee_satoshi(tx_info,src_tx_infos):
+    
+    if is_tx_coinbase(tx_info):
+        return 0
+    
+    tx_total_output_value = calculate_tx_output_satoshi(tx_info)
+    tx_total_input_value = calculate_tx_input_satoshi(tx_info,src_tx_infos)
+    
+    tx_fee_satoshi = tx_total_input_value - tx_total_output_value
+    
+    assert tx_fee_satoshi >= 0
+    
+    return tx_fee_satoshi
+
+
+
+def htmlize_tx_info(writer,tx_info):
+    tx_info = deepcopy(tx_info)
+    
+    
+    
+    blockhash = tx_info['blockhash']
+    txid = tx_info['txid']
+    tx_info['blockhash'] = '<a href="/block?hash={blockhash}">{blockhash}</a>'.format(blockhash=blockhash)
+    tx_info['txid'] = '<a href="/transaction?txid={txid}">{txid}</a>'.format(txid=txid)
+    
+    for src_tx_input_entry in tx_info['vin']:
+        if 'txid' in src_tx_input_entry:
+            src_txid = src_tx_input_entry['txid']
+            src_tx_input_entry['txid'] = '<a href="/transaction?txid={src_txid}">{src_txid}</a>'.format(src_txid=src_txid)
+        
+        
+            src_txid_output_index = src_tx_input_entry['vout']
+            src_tx_input_entry['vout'] = '<a href="/transaction?txid={src_txid}&output_index={vout}#output_{vout}">{vout}</a>'.format(src_txid=src_txid,vout=src_txid_output_index)
+    
+    for output_entry in tx_info['vout']:
+        output_entry['value'] = format_satoshi(btc_to_satoshi(output_entry['value']))
+    
+    writer.pln('<pre>')
+    
+    pprint(tx_info,writer)
+    
+    writer.pln('</pre>')
+
+
+
+def htmlize_blk_info(writer,blk_info):
+    blk_info = deepcopy(blk_info)
+    
+    blockhash = blk_info['hash']
+    height = blk_info['height']
+    difficulty = blk_info['difficulty']
+    blk_info['hash'] = '<a href="/block?hash={blockhash}">{blockhash}</a>'.format(blockhash=blockhash)
+    blk_info['height'] = '<a href="/block?height={height}">{height}</a>'.format(height=height)
+    blk_info['difficulty'] = '{difficulty}'.format(difficulty=difficulty)
+    
+    if 'previousblockhash' in blk_info:
+        blk_info['previousblockhash'] = '<a href="/block?hash={previousblockhash}">{previousblockhash}</a>'.format(previousblockhash=blk_info['previousblockhash'])
+    if 'nextblockhash' in blk_info:
+        blk_info['nextblockhash'] = '<a href="/block?hash={nextblockhash}">{nextblockhash}</a>'.format(nextblockhash=blk_info['nextblockhash'])
+    
+    txids = blk_info['tx']
+    
+    for i in xrange(len(txids)):
+        txid = txids[i]
+        txids[i] = '<a href="/transaction?txid={txid}">{txid}</a>'.format(txid=txid)
+        
+    writer.pln('<pre>')
+    
+    pprint(blk_info,writer)
+    
+    writer.pln('</pre>')
+
+
+
+
 
