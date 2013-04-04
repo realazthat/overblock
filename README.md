@@ -1,6 +1,16 @@
 overblock
 =========
 
+###Description
+
+A web application focused on being run locally, that functions somewhat like blockexplorer, and operates on bitcoind.
+
+###Features
+
+* Last *k* recently mined blocks
+* Block view, by blockhash, or by block height
+* Transaction view
+* Raw block/transaction view
 
 ###Lib Requirements
 
