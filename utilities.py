@@ -93,7 +93,7 @@ def format_relative_time(t):
     
     days = int(t/day_seconds)
     hours = int((t - (days*day_seconds)) / hour_seconds)
-    return '{hours} hours {minutes} minutes'.format(hours=hours,minutes=minutes)
+    return '{days} days {hours} hours'.format(days=days,hours=hours)
 
 
 def calculate_tx_input_satoshi(tx_info,src_tx_infos):
