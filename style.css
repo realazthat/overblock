@@ -1,20 +1,92 @@
 
-.most-recent-blocks-table{
-    width:90%;
-    margin-left:auto;
-    margin-right:auto;
+.top-header-bar{
+    background-color: #e4e4e4;
+    border: 1px solid #b0c4de;
+    margin: 1em;
+    padding: 1em;
+    text-align: right;
 }
 
+.top-title-bar > h2{
+    display: inline;
+    font-size: 2em;
+}
+.top-title-bar > h4{
+    display: inline;
+    margin:1em;
+    color: #606062
+}
+.top-title-bar{
+    background-color: #e4e4e4;
+    border: 1px solid #b0c4de;
+    margin: 1em;
+    padding: 1em;
+}
+
+.top-title-bar-button-field{
+    width:100%;
+    text-align:right;
+}
+
+
+
+
+
+
+.most-recent-blocks-section
+{
+    margin-left:auto;
+    margin-right:auto;
+    width: 90%;
+}
+.most-recent-blocks-table{
+    width: 100%;
+    margin-left:auto;
+    margin-right:auto;
+    font-size:1.2em;
+}
 .most-recent-blocks-table > tbody > tr > th{
     text-align:left;
 }
+.most-recent-blocks-table > tbody > tr > td,th{
+    border-top: 1px solid #b0c4de;
+    padding: .5em;
+}
 
 
+.search-forms-section{
+    margin-left:auto;
+    margin-right:auto;
+    width: 90%;
+}
 
+.search-forms-section > h2{
+    margin-left:auto;
+    margin-right:auto;
+    width: 50%;
+}
 
+.search-forms-section input{
+    padding: 5px;
+    border: 1px solid #b0c4de;
+    background-color: #e4e4e4;
+    width: 100%;
+}
+.search-forms-section form{
+    margin: auto;
+}
 
+.search-forms-table{
+    margin-left:auto;
+    margin-right:auto;
+    width: 50%;
+    padding: 1em;
+}
 
-
+.search-forms-table > tbody > tr > td{
+    width: 50%;
+    padding: .2em;
+}
 
 
 .block-summary-table{
@@ -23,19 +95,31 @@
     /*
     float:left;
     */
+    font-size:1.2em;
 }
 .block-summary-table > tbody > tr > th{
     text-align:left;
+}
+.block-summary-table > tbody > tr > td,th{
+    
+    border-top: 1px solid #b0c4de;
+    padding: .5em;
 }
 
 
 .block-hashes-table{
     width:52%;
     float:right;
+    font-size:1.2em;
 
 }
 .block-hashes-table > tbody > tr > th{
     text-align:left;
+}
+
+.block-hashes-table > tbody > tr > td,th{
+    border-top: 1px solid #b0c4de;
+    padding: .5em;
 }
 
 
@@ -118,20 +202,44 @@
 
 
 
+
+
+/* /transaction */
+
+.transaction-highlight-output-row{
+    background-color: #c0a0a0;
+    border: 1px solid #b0c4de;
+}
+
 .transaction-summary-table{
     width:42%;
+    font-size:1.2em;
+    float: left;
     
 }
 .transaction-summary-table > tbody > tr > th{
     text-align:left;
 }
+.transaction-summary-table > tbody > tr > td,th{
+    border-top: 1px solid #b0c4de;
+    padding: .5em;
+}
+
+
 .transaction-input-output-table{
     width:42%;
+    font-size:1.2em;
 }
 .transaction-input-output-table > tbody > tr > th{
     text-align:left;
 }
+.transaction-input-output-table > tbody > tr > td,th{
+    border-top: 1px solid #b0c4de;
+    padding: .5em;
+}
+.tx_info_raw_section{
 
+}
 
 
 .clear{

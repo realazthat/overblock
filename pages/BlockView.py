@@ -3,7 +3,8 @@
 from Page import Page
 from bitcoinrpc.authproxy import JSONRPCException
 from utilities import format_bytes,calc_reward_satoshi,btc_to_satoshi,\
-    format_relative_time, format_satoshi, format_time
+    format_relative_time, format_satoshi, format_time,\
+    htmlize_blk_info
 from pprint import pprint
 
 from time import gmtime, strftime,time
@@ -15,17 +16,48 @@ class BlockView(Page):
         try:
             access = self.server.create_access()
             config = self.server.config
-            option_blk_get_tx_inputs = config['blk_get_tx_inputs']
-            option_blk_get_txs = config['blk_get_txs']
+            
+            def configure_options():
+                option_blk_get_txs = request.getParameter('blk_get_txs')
+                option_blk_get_tx_inputs = request.getParameter('blk_get_tx_inputs')
+                
+                if option_blk_get_txs != None:
+                    if option_blk_get_txs == '1':
+                        option_blk_get_txs = True
+                    elif option_blk_get_txs == '0':
+                        option_blk_get_txs = False
+                    else:
+                        option_blk_get_txs = None
+                if option_blk_get_tx_inputs != None:
+                    if option_blk_get_tx_inputs == '1':
+                        option_blk_get_tx_inputs = True
+                    elif option_blk_get_tx_inputs == '0':
+                        option_blk_get_tx_inputs = False
+                    else:
+                        option_blk_get_tx_inputs = None
+                    
+                
+                
+                if option_blk_get_txs is None:
+                    option_blk_get_txs = config['blk_get_txs']
+                if option_blk_get_txs is None:
+                    option_blk_get_tx_inputs = config['blk_get_tx_inputs']
+                return option_blk_get_txs,option_blk_get_tx_inputs
+            
+            option_blk_get_txs,option_blk_get_tx_inputs = configure_options()
+            
+            
+            option_blk_get_tx_inputs = option_blk_get_txs and option_blk_get_tx_inputs
+            
             
             rawtransactions = {}
             
             blk_hash = request.getParameter('hash')
             
-            if blk_hash == None:
+            if blk_hash is None:
                 height = request.getParameter('height')
                 
-                if height == None:
+                if height is None:
                     response.setContentType('text/html')
                     
                     writer = response.getWriter()
@@ -149,8 +181,65 @@ class BlockView(Page):
             
             writer.pln('<html><head><link rel="stylesheet" href="/style.css"></head><body>')
             
+            
+            def write_top_header_bar():
+                writer.pln('<div class="top-header-bar">')
+                
+                
+                writer.pln('<strong>Nav:</strong> <a href="/">Main Page</a>')
+                
+                
+                writer.pln('<!-- end of top-header-bar -->')
+                writer.pln('</div>')
+            write_top_header_bar()
+            
+            def write_top_title_bar():
+                writer.pln('<div class="top-title-bar">')
+                
+                
+                writer.pln('<h2>Block</h2> <h4>View information about a bitcoin block.</h4>')
+                
+                
+                writer.pln('<span class="top-title-bar-button-field">')
+                """
+                url_parts = urlparse.urlparse(path)
+                query = urlparse.parse_qs(url_parts.query, True)
+                """
+                
+                
+                fastest_detail_text = 'Fastest detail{default_comment}'.format(default_comment= (' (default)' if not config['blk_get_txs'] else '') )
+                some_detail_text = 'Some detail{default_comment}'.format(default_comment= (' (default)' if config['blk_get_txs'] and not config['blk_get_tx_inputs'] else '') )
+                most_detail_text = 'Most detail{default_comment}'.format(default_comment= (' (default)' if config['blk_get_tx_inputs'] else '') )
+                
+                if not option_blk_get_txs:
+                    writer.pln(fastest_detail_text)
+                else:
+                    writer.pln('<a href="/block?hash={hash}&blk_get_txs=0">{text}</a>'.format(hash=blk_hash,text=fastest_detail_text))
+                
+                writer.pln(' | ')
+                
+                if option_blk_get_txs and not option_blk_get_tx_inputs:
+                    writer.pln(some_detail_text)
+                else:
+                    writer.pln('<a href="/block?hash={hash}&blk_get_txs=1">{text}</a>'.format(hash=blk_hash,text=some_detail_text))
+                
+                writer.pln(' | ')
+                
+                if option_blk_get_txs and option_blk_get_tx_inputs:
+                    writer.pln(most_detail_text)
+                else:
+                    writer.pln('<a href="/block?hash={hash}&blk_get_txs=1&blk_get_tx_inputs=1">{text}</a>'.format(hash=blk_hash,text=most_detail_text))
+                
+                
+                writer.pln('</span>')
+                
+                
+                writer.pln('<!-- end of top-header-bar -->')
+                writer.pln('</div>')
+            write_top_title_bar()
+            
             writer.pln('<table class="block-hashes-table">')
-            writer.pln('<th><td colspan="2"><h3>Hashes</th></tr>')
+            writer.pln('<tr><th colspan="2">Hashes</th></tr>')
             
             
             writer.pln('<tr>')
@@ -185,7 +274,7 @@ class BlockView(Page):
             
             
             writer.pln('<tr>')
-            writer.pln('<td colspan="2"><h3>Summary</h3></td>')
+            writer.pln('<th colspan="2">Summary</th>')
             writer.pln('</tr>')
             
             writer.pln('<tr>')
@@ -328,7 +417,7 @@ class BlockView(Page):
                 writer.pln('<div class="transaction-section-header">')
                 writer.pln('<span style=""><a href="/transaction?txid={txid}">{txid}</a></span>'.format(txid=txid))
                 
-                if tx_fee_satoshi == None or not(tx_fee_satoshi>0):
+                if tx_fee_satoshi is None or not(tx_fee_satoshi>0):
                     writer.pln('<span style="float:right"><strong>(Size: {size}) {time}</strong></span>'.format(size=format_bytes(len(tx_info['hex'])/2), time=format_time(tx_info['time'])))
                     
                 else:
@@ -439,11 +528,7 @@ class BlockView(Page):
             writer.pln('<div class="clear"/>')
             
             
-            writer.pln('<pre>')
-            
-            pprint(blk_info,writer)
-            
-            writer.pln('</pre>')
+            htmlize_blk_info(writer,blk_info)
             
             writer.pln('</body></html>')
         except JSONRPCException as e:

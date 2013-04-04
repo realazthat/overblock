@@ -208,6 +208,28 @@ def htmlize_blk_info(writer,blk_info):
     writer.pln('</pre>')
 
 
+def ascii_ize(value):
+    
+    if isinstance(value,unicode):
+        return value.encode('ascii')
+    
+    
+    if isinstance(value,list):
+        result = []
+        for element in value:
+            result.append(ascii_ize(element))
+        return result
+    
+    if isinstance(value,dict):
+        
+        result = {}
+        for key,item in value.iteritems():
+            akey = ascii_ize(key)
+            aitem = ascii_ize(item)
+            result[akey] = aitem
+        return result
+    
+    return value
 
 
 

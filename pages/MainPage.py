@@ -16,7 +16,26 @@ class MainPage(Page):
         access = self.server.create_access()
         config = self.server.config
         
-        option_blk_get_txs = config['blk_get_txs']
+        def configure_options():
+            option_blk_get_txs = request.getParameter("blk_get_txs")
+            
+            
+            if option_blk_get_txs is not None:
+                if option_blk_get_txs == '1':
+                    option_blk_get_txs = True
+                elif option_blk_get_txs == '0':
+                    option_blk_get_txs = False
+                else:
+                    option_blk_get_txs = None
+            if option_blk_get_txs is None:
+                option_blk_get_txs = config['blk_get_txs']
+            
+            
+            return option_blk_get_txs
+        
+        option_blk_get_txs = configure_options()
+        
+        
         
         blockcount = access.getblockcount()
         
@@ -42,6 +61,51 @@ class MainPage(Page):
 
         
         writer.pln('<html><head><link rel="stylesheet" href="/style.css"></head><body>')
+        
+        def write_top_header_bar():
+            writer.pln('<div class="top-header-bar">')
+            
+            
+            writer.pln('<strong>Nav:</strong> <a href="/">Main Page</a>')
+            
+            
+            writer.pln('<!-- end of top-header-bar -->')
+            writer.pln('</div>')
+        write_top_header_bar()
+        
+        def write_top_title_bar():
+            writer.pln('<div class="top-title-bar">')
+            
+            
+            writer.pln('<h2>Home</h2> <h4>Overview.</h4>')
+            
+            
+            writer.pln('<span class="top-title-bar-button-field">')
+            
+            
+            less_detail_text = 'Less detail{default_comment}'.format(default_comment= (' (default)' if not config['blk_get_txs'] else '') )
+            more_detail_text = 'More detail{default_comment}'.format(default_comment= (' (default)' if config['blk_get_txs'] else '') )
+            
+            if not option_blk_get_txs:
+                writer.pln(less_detail_text)
+            else:
+                writer.pln('<a href="/?blk_get_txs=0">{text}</a>'.format(hash=blk_hash,text=less_detail_text))
+            
+            writer.pln(' | ')
+            
+            if option_blk_get_txs:
+                writer.pln(more_detail_text)
+            else:
+                writer.pln('<a href="/?&blk_get_txs=1">{text}</a>'.format(hash=blk_hash,text=more_detail_text))
+            
+            
+            
+            writer.pln('</span>')
+            
+            
+            writer.pln('<!-- end of top-header-bar -->')
+            writer.pln('</div>')
+        write_top_title_bar()
         
         
         writer.pln('<div class="most-recent-blocks-section">')
@@ -92,6 +156,60 @@ class MainPage(Page):
         
         writer.pln('<!-- end of most-recent-blocks-section -->')
         writer.pln('</div>')
+        
+        
+        
+        
+        writer.pln('<div class="search-forms-section">')
+        
+        
+        writer.pln('<h2>Search</h2>')
+        writer.pln('<table class="search-forms-table"><tbody>')
+        
+        writer.pln('<tr>')
+        writer.pln('<td>Block (hash)</td>')
+        writer.pln('<td>')
+        writer.pln('<form action="/block" method="get">')
+        writer.pln('<input name="hash" type="input" value="" />')
+        writer.pln('<input type="submit" style="display:none;"/>')
+        writer.pln('</form>')
+        writer.pln('</td>')
+        writer.pln('</tr>')
+        
+        writer.pln('<tr>')
+        writer.pln('<td>Block (height)</td>')
+        writer.pln('<td>')
+        writer.pln('<form action="/block" method="get">')
+        writer.pln('<input name="height" type="input" value="" />')
+        writer.pln('<input type="submit" style="display:none;"/>')
+        writer.pln('</form>')
+        writer.pln('</td>')
+        writer.pln('</tr>')
+        
+        writer.pln('<tr>')
+        writer.pln('<td>TxID (hash)</td>')
+        writer.pln('<td>')
+        writer.pln('<form action="/transaction" method="get">')
+        writer.pln('<input name="txid" type="input" value="" />')
+        writer.pln('<input type="submit" style="display:none;"/>')
+        writer.pln('</form>')
+        writer.pln('</td>')
+        writer.pln('</tr>')
+        
+        
+        writer.pln('</tbody></table>')
+        
+        
+        writer.pln('<!-- end of forms-section -->')
+        writer.pln('</div>')
+
+        
+
+
+
+
+
+
 
         writer.pln('</body></html>')
 

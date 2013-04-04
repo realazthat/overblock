@@ -14,6 +14,8 @@ from bitcoinrpc.authproxy import AuthServiceProxy,JSONRPCException
 from pprint import pprint
 from decimal import Decimal
 
+from pages.RawBlockView import RawBlockView
+from pages.RawTransactionView import RawTransactionView
 from pages.TransactionView import TransactionView
 from pages.BlockView import BlockView
 from pages.MainPage import MainPage
@@ -100,7 +102,7 @@ def main():
     httpd = HttpServer(('', port), DemuxServlet)
     httpd.__debug = True
     
-    httpd.paths = { '/': MainPage, '/block': BlockView, '/transaction': TransactionView, '/style.css': StyleSheet}
+    httpd.paths = { '/': MainPage, '/block': BlockView, '/transaction': TransactionView, '/style.css': StyleSheet, '/rawtransaction': RawTransactionView, '/rawblock': RawBlockView}
     httpd.create_access = create_access
     httpd.config = config
     
