@@ -12,7 +12,7 @@ from StringIO import StringIO
 from utilities import btc_to_satoshi, calculate_tx_fee_satoshi,\
     format_satoshi, format_bytes, format_time, \
     calculate_tx_input_satoshi, calculate_tx_output_satoshi,\
-    htmlize_tx_info, htmlize_blk_info
+    htmlize_tx_info, htmlize_blk_info, ascii_ize
     
 
 
@@ -48,11 +48,13 @@ class RawTransactionView(Page):
             
             blk_hash = tx_info['blockhash']
             
-            blk_info = access.getblock(blk_hash)
-            height = blk_info['height']
+            
+                    
             
             
-            pprint(tx_info,writer)
+                
+            
+            pprint(ascii_ize(tx_info),writer)
             
             
         except JSONRPCException as e:
