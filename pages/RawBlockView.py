@@ -4,7 +4,7 @@ from Page import Page
 from bitcoinrpc.authproxy import JSONRPCException
 from utilities import format_bytes,calc_reward_satoshi,btc_to_satoshi,\
     format_relative_time, format_satoshi, format_time,\
-    htmlize_blk_info
+    htmlize_blk_info, ascii_ize
 from pprint import pprint
 from copy import deepcopy
 from time import gmtime, strftime,time
